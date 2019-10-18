@@ -90,7 +90,7 @@ return (
                   })}
                 />
                 <label htmlFor="email">Email</label>
-                <span className="red-text">{errors.password}</span>
+                <span className="red-text">{errors.email}</span>
               </div>
               <div className="input-field col s12">
                 <input
@@ -114,7 +114,7 @@ return (
                   id="password"
                   type="password"
                   className={classnames("", {
-                    invalid: errors.password2
+                    invalid: errors.password
                   })}
                 />
                 <label htmlFor="password">Password</label>
@@ -127,8 +127,12 @@ return (
                   error={errors.password2}
                   id="password2"
                   type="password"
+                  className={classnames("", {
+                    invalid: errors.password2
+                  })}
                 />
                 <label htmlFor="password2">Confirm Password</label>
+                <span className="red-text">{errors.password2}</span>
               </div>
               <div className="col s12" style={{ paddingLeft: "11.250px" }}>
                 <button
