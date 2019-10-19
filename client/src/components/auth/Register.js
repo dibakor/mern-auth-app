@@ -118,7 +118,7 @@ return (
                   })}
                 />
                 <label htmlFor="password">Password</label>
-                <span className="red-text">{errors.password2}</span>
+                <span className="red-text">{errors.password}</span>
               </div>
               <div className="input-field col s12">
                 <input
