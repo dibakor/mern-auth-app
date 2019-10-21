@@ -10,7 +10,8 @@ module.exports = function validateRegisterInput(data) {
 .has().uppercase()
 .has().lowercase()
 .has().digits()
-.has().not().spaces();
+.has().not().spaces()
+.has().symbols();
 
 // Convert empty fields to an empty string so we can use validator functions
   data.name = !isEmpty(data.name) ? data.name : "";
@@ -50,7 +51,7 @@ if (!Validator.equals(data.password, data.password2)) {
   }
 
 if(!schema.validate(data.password)){ 
-  errors.password = "Password is weak";
+  errors.password = "Password should have atleast one uppercase,one lowercase,one digit";
 }
 return {
     errors,

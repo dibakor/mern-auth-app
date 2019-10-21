@@ -157,8 +157,8 @@ const dateOtp = new Date();
     });
   });
 
-  // @route POST api/users/loginOtp
-// @desc Login user using mobile and return JWT token
+  // @route POST api/users/fetchOtp
+// @desc fetch
 // @access Public
 router.post("/fetchOtp", (req, res) => {
   // Form validation
