@@ -18,8 +18,6 @@ app.use(
 app.use(bodyParser.json());
 // DB Config
 const db = require("./config/keys").mongoURI;
-//console.log("URLLLLLL",db);
-// Connect to MongoDB
 mongoose
   .connect(
     process.env.MONGODB_URI || db,
@@ -35,7 +33,7 @@ require("./config/passport")(passport);
 // Routes
 app.use("/api/users", users);
 app.use(express.static(path.join(__dirname, "client", "build")))
-const port = process.env.PORT || 5000; // process.env.port is Heroku's port if you choose to deploy the app there
+const port = process.env.PORT || 5000;
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "build", "index.html"));

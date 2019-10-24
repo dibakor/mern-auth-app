@@ -3,12 +3,13 @@ module.exports = function sendOTP(mobile,data) {
 const keys = require("../config/keys");
 const client = require('twilio')(keys.accountSid,keys.authToken);
 let errors = {};
-console.log('Mobile number: ',mobile);
+
+//create message object
 client.messages
   .create({
-     body: data,
+     body: data, //otp
      from: '+12052551559',
-     to: mobile
+     to: mobile //mobile number of receiver
    })
   .then(message=>console.log("This is the state of messages",message.status))
   .catch((error) =>{

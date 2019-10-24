@@ -10,6 +10,8 @@ const validateLoginInputForOtp = require("../../validation/loginUsingOtp")
 const validateMobileToGetOtp = require("../../validation/fetchOtp")
 // Load User model
 const User = require("../../models/User")
+
+//Load OTP service
 const sendOTP = require("../../util/sendOtp")
 
 // @route POST api/users/register
@@ -22,16 +24,19 @@ router.post("/register", (req, res) => {
     if (!isValid) {
       return res.status(400).json(errors);
     }
+ //Check if email ID exists
   User.findOne({ email: req.body.email }).then(user => {
       if (user) {
         return res.status(400).json({ email: "Email already exists" });
       }
       else {
+ //Check if mobile number exists
         User.findOne({ mobile: req.body.mobile }).then(user => {
           if (user) {
             return res.status(400).json({ mobile: "Mobile Number already exists" });
           }  
           else{
+	//get User details from request body
         const newUser = new User({
           name: req.body.name,
           email: req.body.email,
@@ -126,9 +131,10 @@ const dateOtp = new Date();
     }
     let seconds = (dateOtp.getTime() - user.otpTime.getTime())/1000;
     
-    // Check otp
-
-      if (Number(otp)===Number(user.otp) && (seconds<300)){
+    // Check if the generated OTP and user provided OTP are the same
+    // and check if the OTP is still valid
+    // criteria to check OTP validation is OTP should not be less than 5 mins old
+      if (Number(otp)===Number(user.otp) && (seconds<300)){ 
         // User matched
         // Create JWT Payload
         const payload = {
@@ -157,8 +163,8 @@ const dateOtp = new Date();
     });
   });
 
-  // @route POST api/users/fetchOtp
-// @desc fetch
+// @route POST api/users/fetchOtp
+// @desc generate OTP
 // @access Public
 router.post("/fetchOtp", (req, res) => {
   // Form validation
@@ -168,6 +174,8 @@ const { errors, isValid } = validateMobileToGetOtp(req.body);
     return res.status(400).json(errors);
   }
 const mobile = req.body.mobile;
+
+//function to create OTP
 const generateOtp = () => {
   return Math.floor(1000+Math.random() * 9000);
 }
@@ -179,25 +187,14 @@ console.log("Generate OTP: ",generatedotp);
     if (!user) {
       return res.status(404).json({ mobilenotfound: "Mobile Number not found" });
     }
+    //send generated OTP to twilio service
     const { errors, isValid } = sendOTP(user.mobile,generatedotp);
     if(!isValid){
       console.log("Errors in OTP");
       return res.status(400).json(errors);
     }
-    // const UpdateUser = new User({
-    //   name: user.name,
-    //   email: user.email,
-    //   mobile: user.mobile,
-    //   password: user.password,
-    //   otp : this.otp,
-    //   otpTime : Date.now
-    // });
-    // user
-    // .save()
-    // .then(user => res.json(user))
-    // .catch(err => console.log(err));
-    console.log("User otp",generatedotp);
-    console.log("Date now",Date.now());
+    
+    //update details of User OTP and OTP generated time in DB
     User.updateOne({_id:user._id},{$set:{ otp: generatedotp,otpTime: Date.now()}})
     .then(db =>{
         console.log(db);

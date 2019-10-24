@@ -9,6 +9,7 @@ import {
   UNSET_DISABLED_FLAG,
   SET_DISABLED_FLAG
 } from "./types";
+
 // Register User
 export const registerUser = (userData, history) => dispatch => {
   axios
@@ -25,13 +26,14 @@ export const registerUser = (userData, history) => dispatch => {
       })
     );
 };
+
 // Login - get user token
 export const loginUser = userData => dispatch => {
   axios
     .post("/api/users/login", userData)
     .then(res => {
       // Save to localStorage
-// Set token to localStorage
+      // Set token to localStorage
       const { token } = res.data;
       localStorage.setItem("jwtToken", token);
       // Set token to Auth header
@@ -49,6 +51,7 @@ export const loginUser = userData => dispatch => {
       dispatch(setDisabledflag())
     );
 };
+
 // Set logged in user
 export const setCurrentUser = decoded => {
   return {
@@ -56,6 +59,7 @@ export const setCurrentUser = decoded => {
     payload: decoded
   };
 };
+
 // User loading
 export const setUserLoading = () => {
   return {
@@ -70,6 +74,7 @@ export const unsetDisabledflag = () => {
   };
 };
 
+//set disabled flag
 export const setDisabledflag = () => {
   return {
     type: SET_DISABLED_FLAG
@@ -86,15 +91,19 @@ export const logoutUser = () => dispatch => {
   dispatch(setCurrentUser({}));
 };
 
+//Generate OTP 
 export const fetchOtp = userData => dispatch => {
   axios
     .post("/api/users/fetchOtp", userData)
     .then(res => {
+    //enable submit button and OTP textfield
     dispatch(unsetDisabledflag());
+    //Show OTP sent toast
     M.toast({html: 'OTP sent'});
     })
     .catch(err =>
       dispatch({
+        //set errors
         type: GET_ERRORS,
         payload: err.response.data
       })
@@ -106,7 +115,7 @@ export const submitOtp = userData => dispatch => {
     .post("/api/users/loginOtp", userData)
     .then(res => {
       // Save to localStorage
-// Set token to localStorage
+      // Set token to localStorage
       const { token } = res.data;
       localStorage.setItem("jwtToken", token);
       // Set token to Auth header
@@ -118,6 +127,7 @@ export const submitOtp = userData => dispatch => {
     })
     .catch(err =>
       dispatch({
+        //set errors
         type: GET_ERRORS,
         payload: err.response.data
       })

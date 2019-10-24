@@ -7,9 +7,11 @@ import classnames from "classnames";
 import M from "materialize-css";
 import "materialize-css/dist/css/materialize.min.css";
 
+//Login component
 class Login extends Component {
   constructor() {
     super();
+    //initalizing state
     this.state = {
       email: "",
       password: "",
@@ -17,6 +19,7 @@ class Login extends Component {
       disabled: true
     };
   }
+
   componentDidMount() {
     // If logged in and user navigates to Login page, should redirect them to dashboard
     M.Tabs.init(this.Tabs);
@@ -25,48 +28,56 @@ class Login extends Component {
     }
   }
   componentWillReceiveProps(nextProps) {
-    console.log("Inside component will receive");
-    console.log(nextProps);
     if (nextProps.auth.isAuthenticated) {
       this.props.history.push("/dashboard"); // push user to dashboard when they login
     }
-    if (nextProps.errors) {
+    if (nextProps.errors) { //if any errors occur,set the errors
       this.setState({
         errors: nextProps.errors
       });
     }
-    if (!nextProps.disabled.disabled) {
+    if (!nextProps.disabled.disabled) { //set the disabled value
       this.setState({
         disabled:nextProps.disabled.disabled
       });
     }
   }
+
+//onChange of state
 onChange = e => {
     this.setState({ [e.target.id]: e.target.value });
   };
+
+//To login using email and password
 onSubmit = e => {
     e.preventDefault();
       const userData = {
       email: this.state.email,
       password: this.state.password
     };
-this.props.loginUser(userData); // since we handle the redirect within our component, we don't need to pass in this.props.history as a parameter
+this.props.loginUser(userData); 
   };
+
+//To Generate Otp 
 onFetchOtp = e => {
     e.preventDefault();
       const userData = {
       mobile: this.state.mobile
     };
-this.props.fetchOtp(userData); // since we handle the redirect within our component, we don't need to pass in this.props.history as a parameter
+this.props.fetchOtp(userData); 
   };
+
+//To login using mobile and OTP
 onSubmitMobile = e => {
     e.preventDefault();
       const userData = {
       mobile: this.state.mobile,
       otp: this.state.otp
     };
-this.props.submitOtp(userData); // since we handle the redirect within our component, we don't need to pass in this.props.history as a parameter
+this.props.submitOtp(userData); 
   };
+
+
 render() {
     const { errors} = this.state;
 return (
@@ -223,6 +234,8 @@ return (
     );
   }
 }
+
+//set Property types for Login 
 Login.propTypes = {
   loginUser: PropTypes.func.isRequired,
   fetchOtp: PropTypes.func.isRequired,
@@ -231,6 +244,8 @@ Login.propTypes = {
   errors: PropTypes.object.isRequired,
   disabled: PropTypes.object.isRequired
 };
+
+//map State to properties of Login
 const mapStateToProps = state => ({
   auth: state.auth,
   errors: state.errors,

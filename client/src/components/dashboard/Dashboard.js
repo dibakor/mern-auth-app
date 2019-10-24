@@ -2,7 +2,11 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
+
+//Dashboard component
 class Dashboard extends Component {
+
+  //When user clicks logout
   onLogoutClick = e => {
     e.preventDefault();
     this.props.logoutUser();
@@ -38,10 +42,13 @@ return (
     );
   }
 }
+//set Property types for Dashboard 
 Dashboard.propTypes = {
   logoutUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired
 };
+
+//map State to properties of Register
 const mapStateToProps = state => ({
   auth: state.auth
 });

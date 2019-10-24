@@ -4,9 +4,12 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { registerUser } from "../../actions/authActions";
 import classnames from "classnames";
+
+//Register component
 class Register extends Component {
   constructor() {
     super();
+    //initalizing state
     this.state = {
       name: "",
       email: "",
@@ -23,16 +26,20 @@ class Register extends Component {
     }
   }
   componentWillReceiveProps(nextProps) {
-    if (nextProps.errors) {
+    if (nextProps.errors) { //if any errors occur,set the errors
       this.setState({
         errors: nextProps.errors
       });
     }
   }
 
+
+//onChange of state
 onChange = e => {
     this.setState({ [e.target.id]: e.target.value });
   };
+
+//To submit values provided by user for registration
 onSubmit = e => {
     e.preventDefault();
 const newUser = {
@@ -156,12 +163,14 @@ return (
   }
 }
 
+//set Property types for Register 
 Register.propTypes = {
   registerUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
 
+//map State to properties of Register
 const mapStateToProps = state => ({
   auth: state.auth,
   errors: state.errors

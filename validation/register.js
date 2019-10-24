@@ -50,6 +50,7 @@ if (!Validator.equals(data.password, data.password2)) {
     errors.password2 = "Passwords must match";
   }
 
+//Check whether the password is strong or not
 if(!schema.validate(data.password)){ 
   errors.password = "Password should have atleast one uppercase,one lowercase,one digit";
 }
